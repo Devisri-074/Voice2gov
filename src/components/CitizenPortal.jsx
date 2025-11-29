@@ -1,76 +1,142 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function CitizenPortal() {
-
   const navigate = useNavigate();
-  const [newResponses,setNewResponses]=useState(0);
-  const [showPopup,setShowPopup]=useState(false);
 
-  const bell = new Audio("https://actions.google.com/sounds/v1/alarms/beep_short.ogg");
-
-  const [formData,setFormData]=useState({
-    name:"",age:"",gender:"",location:"",constituency:"",
-    pincode:"",phone:"",category:"",description:""
+  const [formData, setFormData] = useState({
+    name: "",
+    age: "",
+    gender: "",
+    location: "",
+    constituency: "",   // <-- NEW FIELD ADDED
+    pincode: "",
+    phone: "",
+    category: "",
+    description: "",
   });
 
-  useEffect(()=>{
-    const issues = JSON.parse(localStorage.getItem("issues")||"[]");
-    const unread = issues.filter(i=>i.response && i.notified!==true).length;
-
-    if(unread>0){
-      setNewResponses(unread);
-      setShowPopup(true);
-      bell.play();
-
-      setTimeout(()=>navigate("/response-chat"),3000);
-    }
-  },[]);
-
-  const submit = e =>{
-    e.preventDefault();
-    const issues = JSON.parse(localStorage.getItem("issues")||"[]");
-
-    issues.push({id:issues.length+1,...formData,response:"",notified:false});
-    localStorage.setItem("issues",JSON.stringify(issues));
-
-    alert("✔ Issue Submitted");
-    navigate("/citizen");
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  return(
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    const issues = JSON.parse(localStorage.getItem("issues") || "[]");
+
+    const newIssue = {
+      id: issues.length + 1,
+      name: formData.name,
+      age: formData.age,
+      gender: formData.gender,
+      location: formData.location,
+      constituency: formData.constituency, // <-- SAVING
+      pincode: formData.pincode,
+      phone: formData.phone,
+      category: formData.category,
+      description: formData.description,
+    };
+
+    issues.push(newIssue);
+    localStorage.setItem("issues", JSON.stringify(issues));
+
+    alert("Your feedback has been submitted successfully!");
+    navigate("/citizen"); // stay in portal
+
+    // Reset form
+    setFormData({
+      name: "",
+      age: "",
+      gender: "",
+      location: "",
+      constituency: "",
+      pincode: "",
+      phone: "",
+      category: "",
+      description: "",
+    });
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("loggedInUser");
+    navigate("/login");
+  };
+
+  return (
     <>
-    <header>Voice2Gov <div>Citizen Complaint Portal</div></header>
-
-    <div className="container">
-
-      {showPopup &&
-        <div style={{background:"#003366",color:"white",padding:"10px",borderRadius:"6px"}}>
-           🔔 New Response — Opening Soon...
+      <header>
+        Voice2Gov
+        <div style={{ fontSize: "16px", fontWeight: "normal" }}>
+          Improving Interaction Between Citizens and Politicians
         </div>
-      }
+      </header>
 
-      <h2>Submit Issue {newResponses>0 && <span style={{background:"red",color:"white",padding:"4px"}}>{newResponses}</span>}</h2>
+      <div className="container">
+        <h2>Citizen Portal</h2>
 
-      <form onSubmit={submit}>
-        <input name="name" placeholder="Name" onChange={e=>setFormData({...formData,name:e.target.value})} required />
-        <input name="age" placeholder="Age" onChange={e=>setFormData({...formData,age:e.target.value})} required />
-        <input name="location" placeholder="City/Village" onChange={e=>setFormData({...formData,location:e.target.value})} required />
-        <input name="constituency" placeholder="Constituency" onChange={e=>setFormData({...formData,constituency:e.target.value})} required />
-        <input name="phone" placeholder="Phone" onChange={e=>setFormData({...formData,phone:e.target.value})}/>
-        
-        <select name="category" onChange={e=>setFormData({...formData,category:e.target.value})} required>
-          <option value="">Select Category</option>
-          <option>Electricity</option><option>Roads</option><option>Water Supply</option>
-        </select>
+        <form onSubmit={handleSubmit}>
+          <input name="name" placeholder="Full Name*" value={formData.name} onChange={handleChange} required />
+          <input name="age" type="number" placeholder="Age*" value={formData.age} onChange={handleChange} required />
 
-        <textarea name="description" placeholder="Describe Issue" required onChange={e=>setFormData({...formData,description:e.target.value})}/>
+          <select name="gender" value={formData.gender} onChange={handleChange} required>
+            <option value="">Select Gender</option>
+            <option>Male</option>
+            <option>Female</option>
+            <option>Other</option>
+          </select>
 
-        <button type="submit">Submit</button>
-        <button onClick={()=>{localStorage.removeItem("loggedInUser");navigate("/login")}} 
-        className="logout-btn">Logout</button>
-      </form>
-    </div>
+          <input name="location" placeholder="Village/City*" value={formData.location} onChange={handleChange} required />
+
+          {/* ---------------- NEW FIELD ---------------- */}
+          <input
+            name="constituency"
+            placeholder="Constituency*"
+            value={formData.constituency}
+            onChange={handleChange}
+            required
+          />
+
+          <input name="pincode" placeholder="6-digit pincode" value={formData.pincode} onChange={handleChange} required />
+          <input name="phone" placeholder="Phone Number*" value={formData.phone} onChange={handleChange} required />
+
+          <select name="category" value={formData.category} onChange={handleChange} required>
+            <option value="">Select Category</option>
+            <option>Electricity</option>
+            <option>Water Supply</option>
+            <option>Roads</option>
+            <option>Waste Management</option>
+          </select>
+
+          <textarea
+            name="description"
+            placeholder="Type your issue or feedback..."
+            value={formData.description}
+            onChange={handleChange}
+            required
+          />
+
+          <button type="submit">Submit</button>
+
+          <button
+            type="button"
+            onClick={handleLogout}
+            style={{
+              backgroundColor: "red",
+              color: "white",
+              width: "100%",
+              padding: "12px",
+              border: "none",
+              borderRadius: "6px",
+              marginTop: "15px",
+              cursor: "pointer",
+            }}
+          >
+            Logout
+          </button>
+        </form>
+      </div>
     </>
   );
 }

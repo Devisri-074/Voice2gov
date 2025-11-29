@@ -18,15 +18,15 @@ function LoginPage() {
       return;
     }
 
-    // Save Logged User
+    // Store logged user
     localStorage.setItem("loggedInUser", JSON.stringify(user));
     setErrorMsg("");
 
-    // 🔥 Final Role-Based Routing
+    // 🔥 Final Correct Role Routing
     if (user.role === "Citizen") navigate("/citizen");
-    if (user.role === "Politician") navigate("/response");   // Politician sees Response Chat Panel
-    if (user.role === "Admin") navigate("/admin");
-    if (user.role === "Response") navigate("/response");     // Response team also accesses chat
+    if (user.role === "Politician") navigate("/politician");   // FIXED ✔ Politician goes to his portal
+    if (user.role === "Response") navigate("/response");       // Response Portal
+    if (user.role === "Admin") navigate("/admin");             // Admin Portal
   };
 
   return (
@@ -44,7 +44,7 @@ function LoginPage() {
         <form onSubmit={handleLogin}>
           <input
             type="email"
-            placeholder="Enter Username"
+            placeholder="Enter Email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -61,7 +61,9 @@ function LoginPage() {
           <button type="submit">Login</button>
         </form>
 
-        {errorMsg && <p style={{ color: "red", marginTop: "10px" }}>{errorMsg}</p>}
+        {errorMsg && (
+          <p style={{ color: "red", marginTop: "10px" }}>{errorMsg}</p>
+        )}
 
         <p>
           New user?{" "}

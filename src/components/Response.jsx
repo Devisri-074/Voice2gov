@@ -4,43 +4,47 @@ function Response() {
   const [issues, setIssues] = useState([]);
 
   useEffect(() => {
-    const storedIssues = JSON.parse(localStorage.getItem("issues") || "[]");
-    // show only issues which politician responded to
-    const filtered = storedIssues.filter(iss => iss.response && iss.response.trim() !== "");
-    setIssues(filtered);
+    const data = JSON.parse(localStorage.getItem("issues") || "[]");
+    setIssues(data.filter(i => i.response && i.response.trim() !== "")); // show only responded issues
   }, []);
 
   return (
-    <div>
-      <header style={{ background:"#003366",color:"white",padding:"15px",textAlign:"center" }}>
+    <>
+      <header style={{background:"#003366",color:"#fff",padding:"15px",textAlign:"center",fontSize:"26px",fontWeight:"bold"}}>
         Response Panel
-        <div style={{ fontSize:"16px",fontWeight:"normal" }}>
-          Citizen Issues & Politician Responses
-        </div>
+        <div style={{fontSize:"15px",fontWeight:"normal"}}>Citizen Issues & Politician Responses</div>
       </header>
 
-      <div className="container">
-        <h2>Responses Received</h2>
-
+      <div style={{width:"70%",margin:"40px auto"}}>
         {issues.length === 0 ? (
-          <p>❗ No responses yet.</p>
+          <div style={{
+            background:"#fff",padding:"25px",borderRadius:"10px",
+            textAlign:"center",color:"red",fontSize:"18px",
+            boxShadow:"0 3px 10px rgba(0,0,0,0.15)"
+          }}>
+            ❗ No responses yet.
+          </div>
         ) : (
-          issues.map((item, i) => (
-            <div key={i} style={{
-              background:"#fff",padding:"15px",borderRadius:"8px",
-              marginBottom:"10px",boxShadow:"0 2px 6px rgba(0,0,0,0.2)"
+          issues.map(issue => (
+            <div key={issue.id} style={{
+              background:"#fff",padding:"20px",marginBottom:"20px",
+              borderRadius:"10px",boxShadow:"0 3px 10px rgba(0,0,0,0.15)"
             }}>
-              <p><b>Name:</b> {item.name}</p>
-              <p><b>Phone:</b> {item.phone}</p>
-              <p><b>Category:</b> {item.category}</p>
-              <p><b>Description:</b> {item.description}</p>
+              <h3 style={{marginBottom:"5px",color:"#003366"}}>{issue.name}</h3>
+              <p><b>Category:</b> {issue.category}</p>
+              <p><b>Description:</b> {issue.description}</p>
 
-              <p><b style={{color:"green"}}>Response:</b> {item.response}</p>
+              <div style={{
+                background:"#e8f8e8",padding:"12px",borderRadius:"6px",
+                marginTop:"10px",fontSize:"16px",borderLeft:"5px solid green"
+              }}>
+                <b>Politician Response:</b> {issue.response}
+              </div>
             </div>
           ))
         )}
       </div>
-    </div>
+    </>
   );
 }
 
