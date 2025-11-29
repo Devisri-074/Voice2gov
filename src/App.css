@@ -1,156 +1,143 @@
-/* General styles */
+/* ===================== THEME COLORS ======================= */
 :root {
---primary: #003366;
---secondary: #00509e;
---light-bg: #f3f3f3;
+  --primary: #003366;
+  --secondary: #00509e;
+  --light-bg: #f3f3f3;
 }
 
+/* ===================== GLOBAL ============================ */
 body {
-margin: 0;
-font-family: Arial, sans-serif;
-background-color: var(--light-bg);
-background-image: url("[https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Andhra_Pradesh_districts_map.svg/1200px-Andhra_Pradesh_districts_map.svg.png](https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Andhra_Pradesh_districts_map.svg/1200px-Andhra_Pradesh_districts_map.svg.png)");
-background-size: cover;
-background-position: center;
-background-attachment: fixed;
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: var(--light-bg);
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/thumb/8/89/Andhra_Pradesh_districts_map.svg/1200px-Andhra_Pradesh_districts_map.svg.png");
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
 }
 
-/* Header */
+/* ===================== HEADER ============================ */
 header {
-background-color: var(--primary);
-color: white;
-text-align: center;
-font-size: 24px;
-font-weight: bold;
-padding: 15px 0;
-box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  background-color: var(--primary);
+  color: white;
+  text-align: center;
+  font-size: 24px;
+  font-weight: bold;
+  padding: 15px 0;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
-/* Centered card container */
+/* ===================== MAIN CONTAINER ==================== */
 .container {
-background-color: rgba(255, 255, 255, 0.95);
-max-width: 450px;
-margin: 80px auto;
-padding: 30px;
-border-radius: 10px;
-box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-text-align: center;
+  background-color: rgba(255, 255, 255, 0.95);
+  max-width: 450px;
+  margin: 80px auto;
+  padding: 30px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  text-align: center;
 }
 
-/* Headings */
+/* ===================== HEADINGS ========================= */
 h2 {
-color: var(--primary);
-margin-bottom: 20px;
+  color: var(--primary);
+  font-size: 24px;
+  margin-bottom: 20px;
 }
 
-/* Form elements */
+/* 🔥 Notification Badge on Header */
+h2 span {
+  font-size: 16px;
+  background: red;
+  padding: 4px 10px;
+  border-radius: 50%;
+  margin-left: 10px;
+  color: #fff;
+}
+
+/* ===================== FORM STYLING ====================== */
 form {
-display: flex;
-flex-direction: column;
+  display: flex;
+  flex-direction: column;
 }
 
-input,
-select,
-textarea {
-margin-bottom: 15px;
-padding: 10px;
-border: 1px solid #ccc;
-border-radius: 6px;
-font-size: 14px;
+input, select, textarea {
+  margin-bottom: 15px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 14px;
 }
 
 textarea {
-resize: vertical;
-min-height: 80px;
+  resize: vertical;
+  min-height: 80px;
 }
 
-/* Buttons */
+/* ===================== BUTTONS ========================== */
 button {
-background-color: var(--primary);
-color: white;
-border: none;
-border-radius: 6px;
-padding: 12px;
-font-size: 16px;
-cursor: pointer;
-transition: background 0.3s;
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 12px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
 }
 
 button:hover {
-background-color: var(--secondary);
+  background-color: var(--secondary);
+  transform: scale(1.02);
 }
 
-/* ✅ Clean & aligned portal selection layout */
-.portal-grid {
-display: grid;
-grid-template-columns: repeat(2, 180px);
-justify-content: center;
-gap: 20px 25px; /* row-gap and column-gap */
-margin-bottom: 20px;
-}
-
-.portal-grid button {
-width: 180px;
-height: 50px;
-background-color: var(--primary);
-color: white;
-border: none;
-border-radius: 8px;
-font-size: 16px;
-cursor: pointer;
-transition: background 0.3s, transform 0.2s;
-}
-
-.portal-grid button:hover {
-background-color: var(--secondary);
-transform: scale(1.03);
-}
-
-/* Logout and Change Portal button spacing */
-button + button {
-margin-top: 1px;
-}
-
-/* Responsive design */
-@media (max-width: 600px) {
-.container {
-width: 90%;
-margin: 50px auto;
-padding: 20px;
-}
-
-.portal-grid {
-grid-template-columns: 1fr;
-}
-}
-
-/* 💚 Change Portal button color */
-.change-portal-btn {
-background-color: #28a745; /* green */
-}
-
-.change-portal-btn:hover {
-background-color: #218838; /* darker green */
-}
-
-/* 🔴 Logout button color */
+/* Logout Button */
 .logout-btn {
-background-color: #dc3545; /* red */
+  background-color: #dc3545;
 }
+.logout-btn:hover { background-color: #b02a37; }
 
-.logout-btn:hover {
-background-color: #b02a37; /* darker red */
+/* Change portal button green */
+.change-portal-btn {
+  background-color: #28a745;
 }
+.change-portal-btn:hover { background-color: #218838; }
 
-/* Politician portal button spacing */
+/* Spacing for stacked buttons */
 .container button {
-display: block;
-width: 100%;
-margin-bottom: 10px; /* space between each button (Submit, Change Portal, Logout) */
+  width: 100%;
+  margin-bottom: 10px;
+}
+.container button:last-child { margin-bottom: 0; }
+
+/* ===================== PORTAL GRID ====================== */
+.portal-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 180px);
+  justify-content: center;
+  gap: 20px 25px;
+  margin-bottom: 20px;
 }
 
-.container button:last-child {
-margin-bottom: 0; /* remove extra margin after last button */
+/* ===================== RESPONSIVE ======================= */
+@media (max-width: 600px) {
+  .container { width: 90%; padding: 20px; }
+  .portal-grid { grid-template-columns: 1fr; }
 }
 
+/* ===================== 🔥 Notification Popup ============= */
+.notification-popup {
+  background: #003366;
+  color: white;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  text-align: center;
+  font-size: 15px;
+  animation: blink 1s infinite;
+}
 
+/* Blink Effect */
+@keyframes blink {
+  50% { opacity: 0.4; }
+}

@@ -1,12 +1,32 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 function LoginPage() {
   const navigate = useNavigate();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleLogin = (e) => {
     e.preventDefault();
-    navigate("/portal"); // after login
+
+    const users = JSON.parse(localStorage.getItem("users") || "[]");
+    const user = users.find((u) => u.email === email && u.password === password);
+
+    if (!user) {
+      setErrorMsg("❌ Invalid Email or Password");
+      return;
+    }
+
+    // Save Logged User
+    localStorage.setItem("loggedInUser", JSON.stringify(user));
+    setErrorMsg("");
+
+    // 🔥 Final Role-Based Routing
+    if (user.role === "Citizen") navigate("/citizen");
+    if (user.role === "Politician") navigate("/response");   // Politician sees Response Chat Panel
+    if (user.role === "Admin") navigate("/admin");
+    if (user.role === "Response") navigate("/response");     // Response team also accesses chat
   };
 
   return (
@@ -20,17 +40,34 @@ function LoginPage() {
 
       <div className="container">
         <h2>Login</h2>
+
         <form onSubmit={handleLogin}>
-          <input type="text" placeholder="Enter Username" required />
-          <input type="password" placeholder="Enter Password" required />
+          <input
+            type="email"
+            placeholder="Enter Username"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            required
+          />
+
+          <input
+            type="password"
+            placeholder="Enter Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+
           <button type="submit">Login</button>
         </form>
+
+        {errorMsg && <p style={{ color: "red", marginTop: "10px" }}>{errorMsg}</p>}
+
         <p>
           New user?{" "}
           <span
-            className="toggle-link"
             onClick={() => navigate("/signup")}
-            style={{ cursor: "pointer", color: "#003366" }}
+            style={{ cursor: "pointer", color: "#003366", fontWeight: "bold" }}
           >
             Sign up here
           </span>
